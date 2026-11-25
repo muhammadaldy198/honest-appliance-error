@@ -1,11 +1,11 @@
-import { writeFileSync, chmodSync, mkdirSync } from "node:fs";
-import { join } from "node:path";
+import { writeFileSync, chmodSync } from "node:fs";
+// pick v2: microwave keeps resetting it
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const pick = "Clock stuck at 12:00 three days. Microwave keeps resetting it.";
-const outDir = process.env.OUTPUT_DIR ?? "/output";
-mkdirSync(outDir, { recursive: true });
-const target = join(outDir, "entry.txt");
-writeFileSync(target, pick, "utf8");
+const dir = dirname(fileURLToPath(import.meta.url));
+const target = join(dir, "entry.txt");
+const text = "Clock stuck at 12:00 three days. Microwave keeps resetting it.";
+
+writeFileSync(target, text, "utf8");
 chmodSync(target, 0o644);
-
-// Kirana rebuild #2: oven clock stuck at 12:00, the microwave is the culprit.
