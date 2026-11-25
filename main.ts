@@ -1,10 +1,16 @@
-import { writeFileSync, chmodSync } from "node:fs";
-// pick v2: microwave keeps resetting it
-import { join, dirname } from "node:path";
+import { writeFile, chmod } from "node:fs/promises";
+// the clock never leaves 12:00 — three days of flashing, and the microwave keeps wiping it itself
 import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
 
-const dir = dirname(fileURLToPath(import.meta.url));
-const target = join(dir, "entry.txt");
-const text = "Clock stuck at 12:00 three days. Microwave keeps resetting it.";
-writeFileSync(target, text, "utf8");
-chmodSync(target, 0o644);
+const joke =
+  "Clock stuck at 12:00 three days. Microwave keeps resetting it.";
+
+async function main(): Promise<void> {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const outFile = resolve(here, "entry.txt");
+  await writeFile(outFile, joke, "utf8");
+  await chmod(outFile, 0o644);
+}
+
+await main();
